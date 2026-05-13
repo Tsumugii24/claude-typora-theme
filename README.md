@@ -1,10 +1,10 @@
 # Claude Typora Theme
 
-> Chinese README: [README_zh-CN.md](./README_zh-CN.md)
+> Chinese README: [README_zh.md](./README_zh.md)
 
 A self-contained Claude-inspired Typora theme with bundled local fonts, light and dark variants, sidebar refinements, source-view controls, integrated window details, and table rules tuned for Typora rendering.
 
-This project is based on the Claude Typora theme by [blaxisomu](https://github.com/blaxisomu/CLAUDE-Typora), with local modifications for font packaging, readability, sidebar controls, and table rendering.
+This project is based on the Claude Typora theme by [blaxisomu](https://github.com/blaxisomu/CLAUDE-Typora), with modifications for bundled fonts, readability, sidebar controls, and table rendering.
 
 ## Features
 
@@ -13,7 +13,7 @@ This project is based on the Claude Typora theme by [blaxisomu](https://github.c
 - **Readable sidebar root**: the file tree root uses the normal UI font instead of a decorative display font.
 - **Visible Typora controls**: sidebar/source-view buttons are kept available.
 - **Typora table fix**: table header and body separators are explicitly applied to Typora's editor DOM.
-- **Upstream V7.5 details**: includes later upstream polish such as integrated window adaptation, sidebar behavior, callouts, menu details, and table toolbar handling.
+- **Polished Typora UI details**: includes integrated window adaptation, sidebar behavior, callouts, menu details, and table toolbar handling.
 
 ## Preview
 
@@ -82,8 +82,7 @@ See [docs/THIRD_PARTY_NOTICES.md](./docs/THIRD_PARTY_NOTICES.md) for attribution
 
 ## Credits
 
-- Original Claude Typora theme: [blaxisomu/CLAUDE-Typora](https://github.com/blaxisomu/CLAUDE-Typora)
-- Project packaging style referenced from [shamsghi/LatexTypora](https://github.com/shamsghi/LatexTypora)
+- Developed based on Claude Typora theme: [blaxisomu/CLAUDE-Typora](https://github.com/blaxisomu/CLAUDE-Typora)
 - Claude visual inspiration: [claude.ai](https://claude.ai)
 
 ## License
