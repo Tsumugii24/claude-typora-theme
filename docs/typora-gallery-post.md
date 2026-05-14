@@ -13,8 +13,6 @@ typora-root-url: ../../
 
 A Claude-inspired Typora theme with light and dark variants, bundled local fonts, refined sidebar controls, readable file tree root text, and table separators tuned for Typora.
 
-This theme is based on [blaxisomu/CLAUDE-Typora](https://github.com/blaxisomu/CLAUDE-Typora), with modifications for bundled fonts, readability, sidebar controls, and table rendering.
-
 ## Features
 
 - Light and dark theme variants.

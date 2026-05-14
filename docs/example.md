@@ -12,26 +12,9 @@ You can use **bold text**, *italic text*, `inline code`, ==highlighted text==, <
 >
 > This quote block is useful for checking indentation, contrast, and line height.
 
-## 2. Callouts
+## 2. Mathematics
 
-> [!NOTE]
-> This is a note callout. It is useful for neutral supporting information.
-
-> [!TIP]
-> Use callouts to highlight workflow hints, writing advice, or small reminders.
-
-> [!IMPORTANT]
-> Important callouts should stand out clearly without overwhelming nearby content.
-
-> [!WARNING]
-> Warning callouts help draw attention to risky assumptions or breaking changes.
-
-> [!CAUTION]
-> Caution callouts are useful for destructive operations or irreversible decisions.
-
-## 3. Mathematics
-
-Inline math should sit comfortably within text, for example \(E = mc^2\), \(a^2 + b^2 = c^2\), and \(\alpha + \beta = \gamma\).
+Inline math should sit comfortably within text, for example $E = mc^2$, $a^2 + b^2 = c^2$, and $\alpha + \beta = \gamma$.
 
 Block math should remain centered and readable:
 
@@ -54,15 +37,15 @@ A =
 \end{bmatrix}
 $$
 
-## 4. Tables
+## 3. Tables
 
 The table below is useful for checking header rules, body row separators, alignment, and mixed-language content.
 
-| Benchmark | Qwen3-32B | MiMo-V2.5-Pro | Claude-4.6-Opus | Spread | Saturation |
+| Benchmark | Qwen3-32B | gpt-oss-120b | Claude-4.6-Opus | Spread | Saturation |
 | :-- | --: | --: | --: | --: | --: |
 | AIME 2025 | 76.7% | 96.7% | 96.7% | 20.0 | 80.0% |
-| AIME-Evolve v1 pilot | 83.3% | 100.0% | 100.0% | 16.7 | 83.3% |
-| 中文混排测试 | 91.2% | 94.8% | 98.1% | 6.9 | 92.0% |
+| AIME 2026 | 83.3% | 100.0% | 100.0% | 16.7 | 83.3% |
+| 中文基准测试 | 91.2% | 94.8% | 98.1% | 6.9 | 92.0% |
 
 | Feature | Light Theme | Dark Theme | Notes |
 | :-- | :--: | :--: | :-- |
@@ -71,7 +54,7 @@ The table below is useful for checking header rules, body row separators, alignm
 | Table rules | Yes | Yes | Header and body separators are both styled |
 | Callouts | Yes | Yes | Supports Typora/GitHub-style alerts |
 
-## 5. Lists and Tasks
+## 4. Lists and Tasks
 
 1. Install the theme files into Typora's theme directory.
 2. Restart Typora.
@@ -86,7 +69,7 @@ The table below is useful for checking header rules, body row separators, alignm
 - [x] Dark theme screenshot
 - [ ] Submit theme gallery pull request
 
-## 6. Code
+## 5. Code
 
 Inline code such as `font-family`, `@font-face`, and `border-bottom` should align well with surrounding text.
 
@@ -113,6 +96,22 @@ scores = {"quality": 92, "readability": 95, "stability": 90}
 weights = {"quality": 0.45, "readability": 0.35, "stability": 0.20}
 print(weighted_score(scores, weights))
 ```
+## 6. Callouts
+
+> [!NOTE]
+> This is a note callout. It is useful for neutral supporting information.
+
+> [!TIP]
+> Use callouts to highlight workflow hints, writing advice, or small reminders.
+
+> [!IMPORTANT]
+> Important callouts should stand out clearly without overwhelming nearby content.
+
+> [!WARNING]
+> Warning callouts help draw attention to risky assumptions or breaking changes.
+
+> [!CAUTION]
+> Caution callouts are useful for destructive operations or irreversible decisions.
 
 ## 7. Footnotes and Details
 
