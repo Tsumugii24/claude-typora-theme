@@ -397,25 +397,6 @@ body {
 /* ---------- Theme Section ---------- */
 
 /* Implementation detail */
-#write .md-pair-s.md-expand > .md-meta.md-before,
-#write .md-pair-s.md-expand > .md-meta.md-after {
-    display: inline-block !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    vertical-align: baseline !important;
-    font-size: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    opacity: 0 !important;
-}
-
-/* Implementation detail */
-#write .md-pair-s.md-expand {
-    padding: 0 !important;
-}
-
-/* Implementation detail */
 span[md-inline="highlight"] mark,
 .md-pair-s mark {
     /* Implementation detail */
