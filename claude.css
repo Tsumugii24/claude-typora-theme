@@ -1982,7 +1982,8 @@ a:hover {
     position: relative;
     z-index: 50;
     margin: 0 0 3px 7px;
-    width: calc(100% - 4px);
+    width: auto;
+    min-height: 30.8px;
     border-radius: 5px;
     border: none;
     line-height: 1;
@@ -2009,16 +2010,82 @@ a:hover {
 
 /* Implementation detail */
 .outline-content li .outline-label {
-    display: inline-block;
+    display: block;
     border-radius: 4px;
     padding: 7px 7px 7px 8px;
     font-size: 14px !important;
     line-height: 1.2;
-    overflow-wrap: normal;
     word-wrap: normal;
-    word-break: keep-all;
+    overflow-wrap: normal;
+    word-break: normal;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-decoration: none;
+}
+
+/* Typora's paint/layout containment otherwise clips fixed outline tooltips. */
+#typora-sidebar:has(#outline-content .outline-item:hover) {
+    contain: style !important;
+    z-index: 1000 !important;
+}
+
+/* Only the floating label paints the hovered row; remove the old row backdrop. */
+#outline-content .outline-item:hover,
+#toc-content .outline-item:hover {
+    background: transparent !important;
+}
+
+/* Tooltip padding is independent of tree indentation and search styling. */
+#outline-content .outline-item:hover > .outline-label,
+#toc-content .outline-item:hover > .outline-label {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+/* Preserve the row while a fixed, single-line label escapes sidebar clipping. */
+.outline-content li:hover {
+    z-index: 100;
+}
+
+.outline-content li .outline-item:hover > .outline-label {
+    position: fixed;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: max-content;
+    max-width: none;
+    z-index: 1;
+    line-height: 1.6;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow-wrap: normal;
+    overflow: visible;
+    text-overflow: clip;
+    background: var(--hover-color);
+    outline: 1px solid var(--border-color-15);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+}
+
+/* Follow the hovered row when the outline scrolls, without clipping at its edge. */
+@supports (anchor-name: --claude-outline-hover) {
+    .outline-content .outline-item:hover {
+        anchor-name: --claude-outline-hover;
+    }
+
+    .outline-content li .outline-item:hover > .outline-label {
+        position-anchor: --claude-outline-hover;
+        position-visibility: anchors-visible;
+        top: anchor(top);
+        left: anchor(left);
+        min-width: anchor-size(width);
+    }
+}
+
+/* Search results use taller label padding in this theme. */
+.outline-content li:has(.ty-outline-hit) .outline-item {
+    min-height: 32.8px;
 }
 
 /* Implementation detail */
