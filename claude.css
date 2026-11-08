@@ -122,6 +122,13 @@ body {
 
     --LOGO-color: #D97757;
 
+    /* Markdown links imitate the TOC dots' two-step coloring: a muted,
+       low-saturation theme color at rest, and the full-saturation
+       --LOGO-color (exactly the color a TOC dot switches to on hover)
+       once the link is hovered, focused, activated or text-selected. */
+    --link-color: #9E6249;                   /* low saturation theme color at rest */
+    --link-color-strong: var(--LOGO-color); /* high saturation theme color on hover / selection */
+
     /* Implementation detail */
     --border-100: 30 3.3% 11.8%;
     --border-200: 30 3.3% 11.8%;
@@ -1373,9 +1380,35 @@ a:hover {
     text-decoration-color: #D97757;
 }
 
-#write a:hover {
-    color: #D97757;
-    text-decoration-color: #D97757;
+/* ---------- Markdown links ----------
+   Two-step theme coloring, modeled on the TOC dots: a low-saturation theme
+   color at rest (so a link is recognizable even without pointing at it), and
+   the full high-saturation --LOGO-color -- the exact color a TOC dot switches
+   to on hover -- once the link is hovered, focused, activated or selected.
+   Scoped to #write so sidebar / menu links keep their own palettes, and the
+   narrower .md-toc-inner rules below still win for TOC entries. */
+#write a {
+    color: var(--link-color);
+    text-decoration-color: var(--link-color);
+    text-underline-offset: 2px;
+    transition: color 0.12s ease-out, text-decoration-color 0.12s ease-out;
+}
+
+#write a:hover,
+#write a:focus,
+#write a:active,
+#write a:focus-visible,
+#write a.md-focus,
+#write .md-focus a {
+    color: var(--link-color-strong);
+    text-decoration-color: var(--link-color-strong);
+}
+
+/* Text selection keeps the strong tone instead of falling back to body text. */
+#write a::selection,
+#write a *::selection {
+    color: var(--link-color-strong) !important;
+    text-decoration-color: var(--link-color-strong);
 }
 
 /* =========================================
