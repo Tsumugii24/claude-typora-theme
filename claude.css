@@ -83,6 +83,8 @@ body {
     /* Implementation detail */
     --bg-color: #faf9f5;
     --hover-color: #f0eee6;
+    --sidebar-active-bg: rgba(188, 106, 58, 0.05);  /* single tone, upper end of 0.03–0.05 */
+    --sidebar-hover-bg: var(--sidebar-active-bg);   /* alias: hover == active */
     --font-color: #141413;
     --border-color: #1f1e1d;
     --border-color-15: #1f1e1d26;       /* Implementation detail */
@@ -119,6 +121,13 @@ body {
     --quote-boder: #1f1e1d1a;
 
     --LOGO-color: #D97757;
+
+    /* Markdown links imitate the TOC dots' two-step coloring: a muted,
+       low-saturation theme color at rest, and the full-saturation
+       --LOGO-color (exactly the color a TOC dot switches to on hover)
+       once the link is hovered, focused, activated or text-selected. */
+    --link-color: #9E6249;                   /* low saturation theme color at rest */
+    --link-color-strong: var(--LOGO-color); /* high saturation theme color on hover / selection */
 
     /* Implementation detail */
     --border-100: 30 3.3% 11.8%;
@@ -390,11 +399,30 @@ body {
 
 /* Implementation detail */
 ::selection {
-    background-color: var(--LOGO-color) !important;
+    background-color: #D977574d !important;   /* same tone as the TOC pre-dot (#D97757 @ 30%) */
     color: var(--font-color) !important;
 }
 
 /* ---------- Theme Section ---------- */
+
+/* Implementation detail */
+#write .md-pair-s.md-expand > .md-meta.md-before,
+#write .md-pair-s.md-expand > .md-meta.md-after {
+    display: inline-block !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    vertical-align: baseline !important;
+    font-size: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+}
+
+/* Implementation detail */
+#write .md-pair-s.md-expand {
+    padding: 0 !important;
+}
 
 /* Implementation detail */
 span[md-inline="highlight"] mark,
@@ -761,6 +789,26 @@ hr {
     padding: 0 !important;
 }
 
+/* Gap between the line-number divider and the code text.
+
+   THE HIGH-PRIORITY BLOCKER: ".CodeMirror pre { padding: 0 !important; }" just
+   above. It is a SHORTHAND !important, which overrides Typora's built-in
+   ".CodeMirror pre{padding:0 4px}" AND any single-value "padding-left" rule of
+   equal or lower specificity — that's why plain spacing edits did nothing.
+
+   The line element itself IS "pre.CodeMirror-line" (CodeMirror writes no
+   inline padding on it — verified against Typora's bundled fork), and the
+   gutter/divider is anchored outside it, so padding on the line pushes only
+   the code text while the numbers and divider stay put.
+
+   Cascade answer: a later !important rule with a higher-specificity selector
+   wins. #write (id) + 3 classes + element beats .CodeMirror + element.
+   Scoped to #write .md-fences only — math blocks, source mode, mermaid/HTML
+   editors and inline code keep their old behavior. Tune the single value. */
+#write .md-fences .CodeMirror-lines .CodeMirror-code .CodeMirror-line {
+    padding-left: 1.25rem !important;
+}
+
 /* Implementation detail */
 .ty-input.ty-input-after.ty-cm-lang-input {
     border: none !important;
@@ -875,53 +923,160 @@ hr {
     text-align: left !important;
 }
 
-/* Implementation detail */
+/* Code-block token colors follow the VS Code "Light Modern" palette.
+   Line-number color is unchanged (split out from the old comment group). */
 
-.md-fences .CodeMirror-linenumber,
-.md-fences .cm-comment,
-.md-fences .cm-meta {
+.md-fences .CodeMirror-linenumber {
     color: #6e7687 !important;
 }
 
-.md-fences .cm-keyword,
-.md-fences .cm-builtin {
-    color: #8100c2 !important;
+.md-fences .cm-comment {
+    color: #6e7687 !important;
+}
+
+.md-fences .cm-meta {
+    color: #af00db !important;
+}
+
+.md-fences .cm-keyword {
+    color: #0000ff !important;
+}
+
+.md-fences .cm-builtin,
+.md-fences .cm-def {
+    color: #795e26 !important;
 }
 
 .md-fences .cm-string,
 .md-fences .cm-string-2 {
-    color: #008000 !important;
+    color: #a31515 !important;
 }
 
 .md-fences .cm-number {
-    color: #008080 !important;
+    color: #098658 !important;
 }
 
-.md-fences .cm-tag,
-.md-fences .cm-attribute,
-.md-fences .cm-property,
-.md-fences .cm-qualifier,
+.md-fences .cm-tag {
+    color: #800000 !important;
+}
+
+.md-fences .cm-attribute {
+    color: #ff0000 !important;
+}
+
+.md-fences .cm-property {
+    color: #0451a5 !important;
+}
+
+.md-fences .cm-qualifier {
+    color: #795e26 !important;
+}
+
 .md-fences .cm-link {
-    color: #b80a18 !important;
+    color: #0070c1 !important;
 }
 
 .md-fences .cm-operator,
-.md-fences .cm-atom,
-.md-fences .cm-variable {
-    color: #14181f !important;
+.md-fences .cm-bracket {
+    color: #000000 !important;
 }
 
-.md-fences .cm-def {
-    color: #0051c2;
+.md-fences .cm-atom {
+    color: #0000ff !important;
+}
+
+.md-fences .cm-variable {
+    color: #001080 !important;
 }
 
 .md-fences .cm-variable-2,
 .md-fences .cm-variable-3 {
-    color: #b34a00 !important;
+    color: #267f99 !important;
 }
 
-.md-fences .cm-bracket {
-    color: #14181f !important;
+/* ── Per-language refinements (VS Code Light Modern TextMate scopes) ──
+   Counterparts of the Dark Modern overrides; unmapped languages already
+   match via the generic block (HTML tags #800000, attributes #ff0000…). */
+
+/* CSS/SCSS/LESS/SASS: element & .class selectors → #800000,
+   #id/units → #0451a5, property names → #ff0000 (Light Modern red) */
+#write .md-fences[lang="css"] .cm-tag,
+#write .md-fences[lang="scss"] .cm-tag,
+#write .md-fences[lang="sass"] .cm-tag,
+#write .md-fences[lang="less"] .cm-tag,
+#write .md-fences[lang="styl"] .cm-tag,
+#write .md-fences[lang="css"] .cm-qualifier,
+#write .md-fences[lang="scss"] .cm-qualifier,
+#write .md-fences[lang="sass"] .cm-qualifier,
+#write .md-fences[lang="less"] .cm-qualifier {
+    color: #800000 !important;
+}
+
+#write .md-fences[lang="css"] .cm-atom,
+#write .md-fences[lang="scss"] .cm-atom,
+#write .md-fences[lang="sass"] .cm-atom,
+#write .md-fences[lang="less"] .cm-atom {
+    color: #0451a5 !important;
+}
+
+#write .md-fences[lang="css"] .cm-property,
+#write .md-fences[lang="scss"] .cm-property,
+#write .md-fences[lang="sass"] .cm-property,
+#write .md-fences[lang="less"] .cm-property {
+    color: #ff0000 !important;
+}
+
+/* JS/TS/JSON: regex literals → #811f3f; object keys → #001080 */
+#write .md-fences[lang="js"] .cm-string-2,
+#write .md-fences[lang="javascript"] .cm-string-2,
+#write .md-fences[lang="jsx"] .cm-string-2,
+#write .md-fences[lang="ts"] .cm-string-2,
+#write .md-fences[lang="typescript"] .cm-string-2,
+#write .md-fences[lang="tsx"] .cm-string-2,
+#write .md-fences[lang="vue"] .cm-string-2 {
+    color: #811f3f !important;
+}
+
+#write .md-fences[lang="js"] .cm-property,
+#write .md-fences[lang="javascript"] .cm-property,
+#write .md-fences[lang="json"] .cm-property,
+#write .md-fences[lang="jsonc"] .cm-property,
+#write .md-fences[lang="ts"] .cm-property,
+#write .md-fences[lang="typescript"] .cm-property,
+#write .md-fences[lang="jsx"] .cm-property,
+#write .md-fences[lang="tsx"] .cm-property {
+    color: #001080 !important;
+}
+
+/* Python: decorators (meta) → #795e26; builtins (builtin) → #267f99 */
+#write .md-fences[lang="python"] .cm-meta,
+#write .md-fences[lang="python3"] .cm-meta,
+#write .md-fences[lang="py"] .cm-meta {
+    color: #795e26 !important;
+}
+
+#write .md-fences[lang="python"] .cm-builtin,
+#write .md-fences[lang="python3"] .cm-builtin,
+#write .md-fences[lang="py"] .cm-builtin {
+    color: #267f99 !important;
+}
+
+/* Shell/bash/zsh & PHP: $variables (variable-2) → #001080 */
+#write .md-fences[lang="sh"] .cm-variable-2,
+#write .md-fences[lang="bash"] .cm-variable-2,
+#write .md-fences[lang="zsh"] .cm-variable-2,
+#write .md-fences[lang="shell"] .cm-variable-2,
+#write .md-fences[lang="console"] .cm-variable-2,
+#write .md-fences[lang="php"] .cm-variable-2 {
+    color: #001080 !important;
+}
+
+/* Java/Kotlin/C#: @annotations (meta) → #795e26 */
+#write .md-fences[lang="java"] .cm-meta,
+#write .md-fences[lang="kotlin"] .cm-meta,
+#write .md-fences[lang="cs"] .cm-meta,
+#write .md-fences[lang="csharp"] .cm-meta {
+    color: #795e26 !important;
 }
 
 /* ---------- Theme Section ---------- */
@@ -941,17 +1096,18 @@ tt {
 /* ---------- Theme Section ---------- */
 
 blockquote {
-    background-color: transparent;
-    margin: 0 0 0 0.5rem;
-    padding: 0 2rem 0 0.5rem;
-    border-left-width: 4px;
-    color: var(--quote-font-color);
-    border-color: var(--quote-boder);
+    margin: 0;   /* flush with the text column, same as code fences */
+    padding: 0.5rem 1rem;
+    border-left: 2px solid rgb(217 119 87 / 45%);   /* theme orange, 2px like claude-like */
+    background-color: var(--sidebar-active-bg);     /* step-1 selection tone */
+    border-radius: 0.5rem;                          /* same as .md-fences */
+    color: #625950;   /* claude-like.css --quote-text-color */
+    line-height: 1.65rem;                           /* same rhythm as body paragraphs */
 }
 
 /* Implementation detail */
 blockquote > p {
-    padding: 0 2rem 0 0.5rem;
+    padding: 0;
     margin: 0;
 }
 
@@ -1224,9 +1380,35 @@ a:hover {
     text-decoration-color: #D97757;
 }
 
-#write a:hover {
-    color: #D97757;
-    text-decoration-color: #D97757;
+/* ---------- Markdown links ----------
+   Two-step theme coloring, modeled on the TOC dots: a low-saturation theme
+   color at rest (so a link is recognizable even without pointing at it), and
+   the full high-saturation --LOGO-color -- the exact color a TOC dot switches
+   to on hover -- once the link is hovered, focused, activated or selected.
+   Scoped to #write so sidebar / menu links keep their own palettes, and the
+   narrower .md-toc-inner rules below still win for TOC entries. */
+#write a {
+    color: var(--link-color);
+    text-decoration-color: var(--link-color);
+    text-underline-offset: 2px;
+    transition: color 0.12s ease-out, text-decoration-color 0.12s ease-out;
+}
+
+#write a:hover,
+#write a:focus,
+#write a:active,
+#write a:focus-visible,
+#write a.md-focus,
+#write .md-focus a {
+    color: var(--link-color-strong);
+    text-decoration-color: var(--link-color-strong);
+}
+
+/* Text selection keeps the strong tone instead of falling back to body text. */
+#write a::selection,
+#write a *::selection {
+    color: var(--link-color-strong) !important;
+    text-decoration-color: var(--link-color-strong);
 }
 
 /* =========================================
@@ -1475,14 +1657,19 @@ a:hover {
 
 #typora-sidebar .file-list-item {
     transition: background-color 0.15s ease-out;
+    /* rounded file box: radius 5px like outline H1, but wider 14px side gaps, same 3px rhythm */
+    border-radius: 5px;
+    margin: 3px 14px;
+    width: calc(100% - 28px);
+    border-bottom: none;
 }
 
 #typora-sidebar .file-list-item:hover {
-    background-color: var(--hover-color);
+    background-color: var(--sidebar-hover-bg);
 }
 
 #typora-sidebar .file-list-item.active {
-    background-color: var(--hover-color);
+    background-color: var(--sidebar-active-bg);
 }
 
 /* Implementation detail */
@@ -1611,16 +1798,18 @@ a:hover {
 
 /* Implementation detail */
 .file-tree-node:not(.file-node-root):has(> .file-node-content:hover) > .file-node-background {
-    background-color: var(--hover-color);
-    border-radius: 0.5rem;
-    margin: 0 0.5rem;
+    background-color: var(--sidebar-hover-bg);
+    border-radius: 5px;
+    margin: 3px 14px;
+    width: calc(100% - 28px);
 }
 
 /* Implementation detail */
 .file-tree-node.active > .file-node-background {
-    background-color: var(--hover-color);
-    border-radius: 0.5rem;
-    margin: 0 0.5rem;
+    background-color: var(--sidebar-active-bg);
+    border-radius: 5px;
+    margin: 3px 14px;
+    width: calc(100% - 28px);
 }
 
 /* Implementation detail */
@@ -2163,11 +2352,20 @@ li > .outline-item:hover::before,
 }
 
 /* Implementation detail */
-.outline-item:hover,
+/* One tint element (div.outline-item) per state — the label stays transparent,
+   so hover/active can never stack two translucent layers on the text area. */
+.outline-item:hover {
+    background: var(--sidebar-hover-bg) !important;
+}
+
+.outline-item-active > .outline-item {
+    background: var(--sidebar-active-bg) !important;
+}
+
+.outline-label,
 .outline-item:hover > .outline-label,
-.outline-item-active,
-.outline-item-active > .outline-label {
-    background: var(--hover-color) !important;
+.outline-item-active > .outline-item > .outline-label {
+    background: transparent !important;
 }
 
 /* Implementation detail */
@@ -2330,7 +2528,7 @@ li > .outline-item:hover::before,
 
 /* Implementation detail */
 .md-toc-content .md-toc-item:hover {
-    background: var(--hover-color);
+    background: var(--sidebar-hover-bg);
 }
 
 /* Implementation detail */
@@ -2618,11 +2816,44 @@ li > .outline-item:hover::before,
     margin-top: 6px;
 }
 
+/* Group separators in the megamenu sidebar. The markup is three empty
+   <li class="divider"> between the button groups. Option B: make the break
+   unambiguous — taller gap than between buttons, with a centered orange
+   accent line (theme color, fading at both ends, never edge-to-edge).
+   Tune height/width here if needed. */
 .unibody-window #megamenu-menu-list > li.divider {
-    height: 1px;
-    margin: 10px 8px;
+    position: relative;
+    height: 26px;
+    margin: 4px 0 !important;
     border: none !important;
-    background: linear-gradient(90deg, transparent, var(--claude-mega-border), transparent) !important;
+    background: none !important;
+}
+
+/* Line length scales with the sidebar: full width minus 12px each end,
+   ≈3.5× the original 52px, capped at 208px — centered, never edge-to-edge. */
+.unibody-window #megamenu-menu-list > li.divider::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(208px, calc(100% - 24px));
+    height: 1px;
+    border-radius: 1px;
+    background: #D97757;
+}
+
+/* Why Saved was misaligned: Typora's base megamenu.css hides EVERY menu-icon
+   ("li a i { display:none }"), so all items are plain text on one column —
+   then a special-case rule re-enables ONLY this one icon
+   (".megamenu-menu-list #m-saved .fa { … display:inline-block; float:right }")
+   as a save-status indicator; the theme paints it visible, and its 19px+12px
+   slot pushed "Saved" about 31px right of every other item.
+   Fix = collapse the slot exactly like the base already does for all other
+   icons. (visibility:hidden kept the box in flow — that's why the previous
+   attempt left it indented by two CJK chars.) */
+#megamenu-menu-list > li > a#m-saved .fa {
+    display: none !important;
 }
 
 .unibody-window #megamenu-menu-list > li > a {
@@ -2740,7 +2971,7 @@ li > .outline-item:hover::before,
 
 .unibody-window .megamenu-menu-panel .long-btn {
     padding: 12px 14px !important;
-    text-align: center;
+    text-align: left;   /* label hugs the folder icon, not centered */
 }
 
 .unibody-window .megamenu-menu-panel .long-btn:hover,
@@ -3053,9 +3284,7 @@ li > .outline-item:hover::before,
 
 /* Implementation detail */
 .unibody-window {
-    --claude-mega-menu-hover-bg:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(239, 241, 232, 0.42)),
-        rgba(246, 246, 239, 0.64);
+    --claude-mega-menu-hover-bg: rgba(188, 106, 58, 0.05);   /* same single tone as sidebar */
 }
 
 .unibody-window #megamenu-menu-list > li > a {
@@ -3136,4 +3365,59 @@ li > .outline-item:hover::before,
     background: var(--hover-color) !important;
 }
 
+/* =========================================
+   Tables — LaTeX booktabs three-line style
+   (ported from latex.css: heavy top/bottom rules 0.08em, light header rule
+   0.05em, no vertical rules; natural width, centered; theme's own colors)
+   ========================================= */
 
+.write table,
+#write table {
+    width: auto;
+    max-width: 100%;
+    margin: 1.6rem auto;
+    border: none;
+    border-collapse: collapse;
+    border-top: 0.08em solid var(--table-th-border);
+    border-bottom: 0.08em solid var(--table-th-border);
+    background-color: transparent;
+    line-height: 1.65rem;
+}
+
+.write .md-table-fig.table-figure,
+.write figure:has(> table) {
+    margin-bottom: 1.6rem;
+}
+
+.write table thead,
+#write table thead {
+    border-bottom: none;
+}
+
+.write table thead tr,
+#write table thead tr {
+    border-bottom: 0.05em solid var(--table-th-border);
+}
+
+.write th,
+.write td,
+#write th,
+#write td {
+    border: none !important;
+    padding: 0.42em 0.75em !important;
+    background-color: transparent;
+    height: auto;
+}
+
+.write table tr:last-child td,
+#write table tr:last-child td {
+    border-bottom: none !important;
+}
+
+.write th,
+#write th {
+    font-weight: var(--font-strong);
+    text-align: center;
+}
+
+/* body cells keep the default left alignment — latex.css centers only headers */
