@@ -227,12 +227,24 @@ body {
 #write {
     font-family: var(--font-serif);
     width: 100%;
-    max-width: 752px;
+    max-width: 960px;
     padding: 2.25rem 1rem 4.375rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     caret-color: #D97757;
+}
+
+@media only screen and (min-width: 1400px) {
+    #write {
+        max-width: 1124px;
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    #write {
+        max-width: 1300px;
+    }
 }
 
 /*--- Selection ---*/
