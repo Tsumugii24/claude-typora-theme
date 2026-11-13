@@ -562,6 +562,31 @@ markdown > ol ol {
 }
 
 /* Implementation detail */
+/* Keep wide tables readable inside the bounded writing area. */
+@media screen {
+    #write .md-table-fig.table-figure {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    #write .md-table-fig.table-figure table {
+        table-layout: auto;
+        width: max-content;
+        min-width: 100%;
+        max-width: none;
+    }
+
+    #write .md-table-fig.table-figure th,
+    #write .md-table-fig.table-figure td {
+        min-width: 7rem;
+        max-width: 28rem;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: anywhere;
+    }
+}
+
 .ty-table-edit {
     max-width: 696px;
     width: 100%;
